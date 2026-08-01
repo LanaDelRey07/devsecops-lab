@@ -83,12 +83,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extraer metadatos de la imagen
+      - name: Extraer metadatos de la imagen (SHA Completo)
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: type=sha
+          tags: |
+            type=sha,format=long
 
       - name: Compilar Imagen Docker Local
         uses: docker/build-push-action@v5
@@ -145,6 +146,5 @@ jobs:
 
       - name: Firmar Imagen mediante Sigstore (OIDC Keyless)
         run: |
-          # Convertir el nombre de la imagen a minúsculas para compatibilidad con Cosign / OCI
           IMAGE_REF=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}" | tr '[:upper:]' '[:lower:]')
           cosign sign --yes "$IMAGE_REF"
