@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
   packages: write
-  id-token: write
+  id-token: write # Requerido para firma criptográfica Keyless con Sigstore/Cosign vía OIDC
 
 jobs:
   # 1. SECRET SCANNING
@@ -145,5 +145,6 @@ jobs:
 
       - name: Firmar Imagen mediante Sigstore (OIDC Keyless)
         run: |
-          IMAGE_REF="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}"
+          # Convertir el nombre de la imagen a minúsculas para compatibilidad con Cosign / OCI
+          IMAGE_REF=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}" | tr '[:upper:]' '[:lower:]')
           cosign sign --yes "$IMAGE_REF"
