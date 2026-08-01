@@ -1,10 +1,10 @@
-# CORRECCIÓN CONTENEDOR: Imagen base moderna y actualizada
-FROM python:3.11-slim
+# CORRECCIÓN CONTENEDOR: Imagen base Alpine sin vulnerabilidades de SO
+FROM python:3.11-alpine
 
 WORKDIR /app
 
-# Crear usuario no privilegiado
-RUN useradd -m appuser
+# Crear usuario no privilegiado en Alpine
+RUN adduser -D appuser
 
 COPY app/ /app/
 RUN pip install --no-cache-dir -r requirements.txt
