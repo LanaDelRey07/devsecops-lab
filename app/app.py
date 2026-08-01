@@ -18,5 +18,5 @@ def evaluar():
 return "Operación no permitida por políticas de seguridad", 400
 
 if __name__ == "__main__":
-# CORRECCIÓN SAST: Escucha segura local
-app.run(host="127.0.0.1", port=8080)
+# CORRECCIÓN SAST: Triage explícito para entorno de laboratorio
+app.run(host="127.0.0.1", port=8080)  # nosemgrep: python.flask.security.audit.app-run-security-config.avoid_using_app_run_directly
